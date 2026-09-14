@@ -1,38 +1,68 @@
-## Instalação do Backend
 
-Primeiro, clone o repositório:
+# Guia de Instalação e Execução — ESM Forum
 
-``` git clone https://github.com/mtov/esmforum.git```
+Este documento descreve os pré-requisitos, instruções passo a passo e solução de problemas para a execução local da aplicação **ESM Forum** (Backend e Frontend) em ambiente Windows 11.
 
-Em seguida, instale a versão mais recente do Node.js. Mais informações [aqui](https://nodejs.org/en/download).
+---
 
-Instale também as dependências do projeto:
+## 1. Pré-requisitos do Sistema
 
-```console
-npm install 
-```
+Para executar o projeto sem conflitos de compilação, certifique-se de ter as seguintes ferramentas instaladas:
 
-Você também vai precisar do `sqlite`. Para testar se ele já está instalado, use: `sqlite3 --version`. 
+* **Node.js:** Versão **v20 LTS** ou **v22 LTS** (Recomendado evitar versões *Current* como v24 para prevenir incompatibilidades de binários C++ do SQLite).
+* **npm:** Versão **9.x** ou superior.
+* **Git &amp; GitHub Desktop:** Para controle de versão e sincronização dos forks.
+* **VS Code:** Editor de código recomendado.
 
-Se o sqlite não estiver instalado,  verifique no site da sua distribuição como fazer essa instalação. Por exemplo, para distribuições Debian, basta usar:
+---
 
-```console
-sudo apt install sqlite3
-```
+## 2. Passo a Passo de Instalação e Execução
 
-## Execução do Backend
+### A) Clonagem dos Repositórios
+1. Realize o *fork* dos repositórios oficiais na sua conta do GitHub:
+   * Backend: `esmforum`
+   * Frontend: `esmforum-react`
+2. No **GitHub Desktop**, clone ambos para a sua máquina local.
 
-Para executar o servidor, digite no diretório raiz:
+---
 
-``` node server.js```
+### B) Execução do Backend (`esmforum`)
+1. Abra a pasta `esmforum` no VS Code.
+2. Instale as dependências no terminal:
+   ```bash
+    npm install
 
-Se em algum momento você quiser "zerar" o banco de dados do sistema, você pode usar:
+1. Inicie o servidor:
 
-```
-cd bd
-./criar_bd.sh
-```
+   ```bash
+    npm start
 
-## Instalação e Execução do Frontend
+*(Ou* *node server.js* *). O servidor estará ativo em* *http://localhost:5000* *.*
 
-Veja informações neste [repositório](https://github.com/mtov/esmforum-react).
+&gt; **Nota sobre o Banco de Dados:** O projeto utiliza SQLite3 (`better-sqlite3`). Para resetar a base de dados em ambiente Linux/WSL, execute os scripts na pasta `bd/`.
+
+---
+
+### C) Execução do Frontend (`esmforum-react`)
+
+1. Abra a pasta `esmforum-react` em um novo terminal do VS Code.
+2. Instale as dependências e inicie a aplicação:
+
+   ```bash
+    npm install
+    npm start
+
+1. A interface gráfica abrirá automaticamente em `http://localhost:3000`.
+
+---
+
+## 3\. Resolução de Problemas Conhecidos (*Troubleshooting*)
+
+* **Erro de compilação C++ /** **better-sqlite3** **(** **node-gyp** **):**
+  * *Causa:* Uso do Node.js v24 (Current) sem ambiente de compilação Visual Studio instalado.
+  * *Solução:* Instalar o Node.js v20/v22 LTS, reiniciar o VS Code e refazer o `npm install`.
+* **Erro** **Failed to fetch** **no React:**
+  * *Causa:* Executar o frontend sem o servidor backend ligado.
+  * *Solução:* Manter dois terminais ativos (Backend na porta 5000 e Frontend na porta 3000).
+* **Alertas do** **npm audit** **:**
+  * *Recomendação:* **Não** executar `npm audit fix --force`, para evitar atualizações com quebras de compatibilidade (*breaking changes*).
